@@ -19,7 +19,20 @@ void out(double x[], double** Jac, double F[])
         cout << "\n";
     }
 }
+void out_matrix(double** matrix,int size,double* B)
+{
+	for (int i = 0; i < size; i++)
+	{
+		cout << "|";
+		for (int b = 0; b < size; b++)
+		{
+			cout << setw(10) << matrix[i][b];
+		}
+		cout << setw(5) << "|" << setw(5) << "|" << setw(5) << B[i] << setw(5) << "|" << "\n";
 
+	}
+	cout << "\n";
+}
 
 using namespace std;
 class rabochiy
@@ -67,7 +80,7 @@ public:
 		rabochiy myObject(size, matrix, B);
 		int y;
 		double max = matrix[0][0];
-		myObject.out();
+		out_matrix(matrix, size,B);
 		
 
 		for (int i = 0; i < size; i++)
@@ -79,15 +92,15 @@ public:
 			}
 		}
 
-		myObject.out();
+		out_matrix(matrix, size, B);
 		for (int i = 0; i < size; i++)
 		{
 			swap(matrix[y][i], matrix[0][i]);
 		}
 
-		myObject.out();
+		out_matrix(matrix, size, B);
 
-		for (int line = 0, column = 0; line < size && column == line; line++, column++)
+		for (int line = 0, column = 0; line < size-1 && column == line; line++, column++)
 		{
 
 			for (int i = 1; i < size; ++i)
@@ -100,7 +113,7 @@ public:
 				}
 
 				B[i] = B[i] / time_x;
-				myObject.out();
+				out_matrix(matrix, size, B);
 				for (int b = 0; b < size; b++)
 				{
 					matrix[i][b] *= max;
@@ -109,25 +122,28 @@ public:
 
 				B[i] *= max;
 				B[i] -= B[line];
-				myObject.out();
+				out_matrix(matrix, size, B);
 				for (int b = 0; b < size; b++)
 				{
 					matrix[line][b] /= time_x;
 				}
 				B[line] /= time_x;
-				myObject.out();
+				out_matrix(matrix, size, B);
 			}
 
 		}
-		myObject.out();
-		for (int i = size - 1; i > 0; i--)
+		out_matrix(matrix, size, B);
+		for (int i = size - 1; i >= 0; i--)
 		{
 			double time_x = 0;
-			for (int b = size - 1; b > i; b--)
-			{
-				time_x += matrix[i][b] * X[size - b];
-			}
-			X[i] = B[i] - time_x;
+		
+				for (int b = size - 1; b > i; b--)
+				{
+					time_x += matrix[i][b] * X[size - b];
+				}
+		
+
+			X[i] = B[i]/matrix[i][i] - time_x/matrix[i][i];
 		}
 	}
 	double** matrix_out()
@@ -155,5 +171,10 @@ public:
 
 		}
 		cout << "\n";
+		cout << "Значение x:" << "\n";
+		for (int i = 0; i < size; i++)
+		{
+			cout << setw(3) << "|" << setw(12) << X[i] << setw(3) << "|" << "\n";
+		}
 	}
 };
