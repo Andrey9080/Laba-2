@@ -1,5 +1,29 @@
-﻿#include "Header.h"
-#include "Gauss.cpp"
+#include "Header.h"
+
+double function1(double x1, double x2)
+{
+    return (sin(x1) + x1 * x2 - 1);
+}
+double function2(double x1, double x2) 
+{
+    return (2 * x1 + cos(x2) - 2);
+}
+double f1derivative11(double x1, double x2, double dif) {
+    cout << ((function1(x1 + dif, x2) - function1(x1, x2)) / (dif));
+    return((function1(x1 + dif, x2) - function1(x1, x2)) / (dif));
+}
+double f1derivative12(double x1, double x2, double dif) {
+    cout << ((function1(x1, x2 + dif) - function1(x1, x2)) / (dif));
+    return((function1(x1, x2 + dif) - function1(x1, x2)) / (dif));
+}
+double f2derivative21(double x1, double x2, double dif) {
+    cout << ((function2(x1 + dif, x2) - function2(x1, x2)) / (dif));
+    return((function2(x1 + dif, x2) - function2(x1, x2)) / (dif));
+}
+double f2derivative22(double x1, double x2, double dif) {
+    cout << ((function2(x1, x2 + dif) - function2(x1, x2)) / (dif));
+    return((function2(x1, x2 + dif) - function2(x1, x2)) / (dif));
+}
 int main()
 {
 
@@ -8,27 +32,36 @@ int main()
     double* x = new double[2];
     x[0] = 1;
     x[1] = 1;
+    double M = 0.01;
     double** Jac = new double* [2];
-    for (int i = 0; i < 2; i++) 
+    for (int i = 0; i < 2; ++i) 
     {
         Jac[i] = new double[2];
     }
     double  F[2];
-    int k = 0;
+    int NIT = 10;
+    while (NIT > 0)
+    {
 
-        F[0] = sin(x[0]) + x[0] * x[1] - 1; 
-        F[1] = 2 * x[0] + cos(x[1]) - 2;
 
-        Jac[0][0] = cos(x[0] + 1); 
-        Jac[0][1] = -1;
-        Jac[1][0] = 2;
-        Jac[1][1] = -sin(x[1]);
-  
-    out(x,Jac,F);
-    rabochiy gauss(2,Jac,x);
-    gauss.work();
-    gauss.out();
-    for (int i = 0; i < 2; i++) 
+        Jac[0][0] = f1derivative11(x[0], x[2], M);
+        Jac[0][1] = f1derivative12(x[0], x[2], M);
+        Jac[1][0] = f2derivative21(x[0], x[2], M);
+        Jac[1][1] = f2derivative22(x[0], x[2], M);
+
+        out(x, Jac, F);
+        rabochiy gauss(2, Jac, x);
+        gauss.work();
+        gauss.out();
+        x = gauss.unknown_out();
+        
+        --NIT;
+        
+    }
+       
+
+    cout << "\n" << x[0] << " " << x[1] << "\n";
+    for (int i = 0; i < 2; ++i) 
     {
         delete[] Jac[i];
     }
