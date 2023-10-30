@@ -8,7 +8,7 @@ using namespace std;
 
 void out(double x[], double** Jac, double F[])
 {
-    cout << setw(10) << x[0] << setw(10) << x[1] << "\n" << "\n";
+    cout << setw(10) << x[0] << setw(10) << x[1] << "\n" ;
    
     for (int i = 0; i < 2; ++i)
     {
@@ -19,12 +19,13 @@ void out(double x[], double** Jac, double F[])
         cout << "\n";
     }
 }
+
 void out_matrix(double** matrix,int size,double* B)
 {
-	for (int i = 0; i < size; i++)
+	for (int i = 0; i < size; ++i)
 	{
 		cout << "|";
-		for (int b = 0; b < size; b++)
+		for (int b = 0; b < size; ++b)
 		{
 			cout << setw(10) << matrix[i][b];
 		}
@@ -45,20 +46,20 @@ private:
 
 public:
 
-	rabochiy(int sizee, double** matrixx, double answers[])
+	rabochiy(int sizee, double** matrixx, double* answers)
 	{
 		size = sizee;
 	    matrix = new double* [size];
-		for (int i = 0; i < size; i++)
+		for (int i = 0; i < size; ++i)
 		{
 			matrix[i] = new double[size];
 		}
 		 B = new double[size];
 	     X = new double[size];
 
-		for (int i = 0; i < size; i++)
+		for (int i = 0; i < size; ++i)
 		{
-			for (int b = 0; b < size; b++)
+			for (int b = 0; b < size; ++b)
 			{
 				matrix[i][b] = matrixx[i][b];
 			}
@@ -67,7 +68,7 @@ public:
 	}
 	~rabochiy()
 	{
-		for (int i = 0; i < 2; i++)
+		for (int i = 0; i < 2; ++i)
 		{
 			delete[] matrix[i];
 		}
@@ -77,13 +78,12 @@ public:
 	}
 	void work()
 	{
-		rabochiy myObject(size, matrix, B);
 		int y;
 		double max = matrix[0][0];
 		out_matrix(matrix, size,B);
 		
 
-		for (int i = 0; i < size; i++)
+		for (int i = 0; i < size; ++i)
 		{
 			if (max < matrix[i][0])
 			{
@@ -93,28 +93,28 @@ public:
 		}
 
 		out_matrix(matrix, size, B);
-		for (int i = 0; i < size; i++)
+		for (int i = 0; i < size; ++i)
 		{
 			swap(matrix[y][i], matrix[0][i]);
 		}
 
 		out_matrix(matrix, size, B);
 
-		for (int line = 0, column = 0; line < size-1 && column == line; line++, column++)
+		for (int line = 0, column = 0; line < size-1 && column == line; ++line, ++column)
 		{
 
 			for (int i = 1; i < size; ++i)
 			{
 				double time_x = matrix[i][column];
 
-				for (int b = 0; b < size; b++)
+				for (int b = 0; b < size; ++b)
 				{
 					matrix[i][b] = matrix[i][b] / time_x;
 				}
 
 				B[i] = B[i] / time_x;
-				out_matrix(matrix, size, B);
-				for (int b = 0; b < size; b++)
+				/*out_matrix(matrix, size, B);*/
+				for (int b = 0; b < size; ++b)
 				{
 					matrix[i][b] *= max;
 					matrix[i][b] -= matrix[line][b];
@@ -122,22 +122,22 @@ public:
 
 				B[i] *= max;
 				B[i] -= B[line];
-				out_matrix(matrix, size, B);
-				for (int b = 0; b < size; b++)
+				/*out_matrix(matrix, size, B);*/
+				for (int b = 0; b < size; ++b)
 				{
 					matrix[line][b] /= time_x;
 				}
 				B[line] /= time_x;
-				out_matrix(matrix, size, B);
+				/*out_matrix(matrix, size, B);*/
 			}
 
 		}
 		out_matrix(matrix, size, B);
-		for (int i = size - 1; i >= 0; i--)
+		for (int i = size - 1; i >= 0; --i)
 		{
 			double time_x = 0;
 		
-				for (int b = size - 1; b > i; b--)
+				for (int b = size - 1; b > i; --b)
 				{
 					time_x += matrix[i][b] * X[size - b];
 				}
@@ -148,11 +148,13 @@ public:
 	}
 	double** matrix_out()
 	{
+		
 		return matrix;
 	}
 	double* unknown_out()
 	{
-		return X;
+	    return X[i];
+	
 	}
 	double* answers_out()
 	{
@@ -160,10 +162,10 @@ public:
 	}
 	void out()
 	{
-		for (int i = 0; i < size; i++)
+		for (int i = 0; i < size; ++i)
 		{
 			cout  << "|";
-			for (int b = 0; b < size; b++)
+			for (int b = 0; b < size; ++b)
 			{
 				cout << setw(10) << matrix[i][b];
 			}
@@ -172,7 +174,7 @@ public:
 		}
 		cout << "\n";
 		cout << "Значение x:" << "\n";
-		for (int i = 0; i < size; i++)
+		for (int i = 0; i < size; ++i)
 		{
 			cout << setw(3) << "|" << setw(12) << X[i] << setw(3) << "|" << "\n";
 		}
