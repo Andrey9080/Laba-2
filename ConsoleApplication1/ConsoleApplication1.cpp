@@ -1,5 +1,20 @@
 #include "Header.h"
-
+double f11(double x1, double x2)
+{
+    return cos(x1+1);
+}
+double f12(double x1, double x2)
+{
+    return (-1);
+}
+double f21(double x1, double x2)
+{
+    return 2;
+}
+double f22(double x1, double x2)
+{
+    return -sin(x2);
+}
 double function1(double x1, double x2)
 {
     return (sin(x1) + x1 * x2 - 1);
@@ -39,17 +54,17 @@ int main()
         Jac[i] = new double[2];
     }
     double  F[2];
-    int NIT = 10;
+    int NIT = 5;
     while (NIT > 0)
     {
 
 
-        Jac[0][0] = f1derivative11(x[0], x[2], M);
-        Jac[0][1] = f1derivative12(x[0], x[2], M);
-        Jac[1][0] = f2derivative21(x[0], x[2], M);
-        Jac[1][1] = f2derivative22(x[0], x[2], M);
+        Jac[0][0] = f1derivative11(x[0], x[1], M);
+        Jac[0][1] = f1derivative12(x[0], x[1], M);
+        Jac[1][0] = f2derivative21(x[0], x[1], M);
+        Jac[1][1] = f2derivative22(x[0], x[1], M);
 
-        out(x, Jac, F);
+      /*  out(x, Jac, F);*/
         rabochiy gauss(2, Jac, x);
         gauss.work();
         gauss.out();
@@ -57,6 +72,25 @@ int main()
         
         --NIT;
         
+    }
+    cout<<"\n" << "------------------------------------------------------------------------------------------------------------------------" << "\n";
+    while (NIT > 0)
+    {
+
+
+        Jac[0][0] = f11(x[0], x[1]);
+        Jac[0][1] = f12(x[0], x[1]);
+        Jac[1][0] = f21(x[0], x[1]);
+        Jac[1][1] = f22(x[0], x[1]);
+
+        /*  out(x, Jac, F);*/
+        rabochiy gauss(2, Jac, x);
+        gauss.work();
+        gauss.out();
+        x = gauss.unknown_out();
+
+        --NIT;
+
     }
        
 
